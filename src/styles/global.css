@@ -49,6 +49,7 @@ body {
   transform: translate(-50%, -50%);
   transition: width 0.2s, height 0.2s, opacity 0.2s;
   mix-blend-mode: screen;
+  opacity: 0;
 }
 #cursor-ring {
   position: fixed;
@@ -58,12 +59,17 @@ body {
   pointer-events: none;
   z-index: 9998;
   transform: translate(-50%, -50%);
-  transition: width 0.3s, height 0.3s, border-color 0.3s;
+  transition: width 0.3s, height 0.3s, border-color 0.3s, opacity 0.3s;
+  opacity: 0;
 }
 body:has(a:hover) #cursor-ring,
 body:has(button:hover) #cursor-ring {
   width: 52px; height: 52px;
   border-color: var(--cyan);
+}
+@media (hover: none) {
+  body { cursor: auto; }
+  #cursor, #cursor-ring { display: none; }
 }
 
 /* ── Reveal Animations ─────────────────────────────────────────────────────── */

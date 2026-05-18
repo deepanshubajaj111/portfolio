@@ -393,6 +393,10 @@ export function getStrapiImageUrl(image: import('@/types/strapi').StrapiImage): 
   if (!image.data) return null;
   const url = image.data.attributes.url;
   if (url.startsWith('/uploads/')) return `${STRAPI_URL}${url}`;
+  if (url.startsWith('/')) {
+    const base = (import.meta.env.BASE_URL ?? '/').replace(/\/$/, '');
+    return `${base}${url}`;
+  }
   return url;
 }
 
