@@ -34,7 +34,7 @@ const [hero, about, skillCategories, experiences, projects, socialLinks, siteCon
   title={siteConfig.site_title}
   description={siteConfig.meta_description}
 >
-  <Hero   hero={hero} />
+  <Hero   hero={hero} resumeUrl={siteConfig.resume_url} />
   <About  about={about} />
   <Skills categories={skillCategories} techStrip={siteConfig.tech_strip} />
   <Experience experiences={experiences} />

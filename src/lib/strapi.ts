@@ -352,7 +352,7 @@ export async function getSiteConfig(): Promise<SiteConfig['attributes']> {
       meta_description: 'Senior Frontend Engineer specialising in React, Next.js, and Supabase. Building performant, pixel-perfect web experiences.',
       og_image: { data: null },
       contact_email: 'dbajaj.dev@gmail.com',
-      resume_url: null,
+      resume_url: '/resume.pdf',
       footer_note: 'Designed & developed with obsession.',
       tech_strip: [
         'React', 'Next.js', 'TypeScript', 'Supabase', 'Tailwind',

@@ -4,8 +4,13 @@ import HeroCanvas from '@/components/HeroCanvas.astro';
 
 interface Props {
   hero: Hero['attributes'];
+  resumeUrl?: string | null;
 }
-const { hero } = Astro.props;
+const { hero, resumeUrl } = Astro.props;
+const base = (import.meta.env.BASE_URL ?? '/').replace(/\/$/, '');
+const resolvedResumeUrl = resumeUrl
+  ? (resumeUrl.startsWith('/') ? `${base}${resumeUrl}` : resumeUrl)
+  : null;
 ---
 
 <section
@@ -39,7 +44,7 @@ const { hero } = Astro.props;
     <h1
       class="leading-[0.95] tracking-[-0.04em] mb-6"
       style="font-family:'Syne',sans-serif;font-weight:800;
-             font-size:clamp(3.5rem,8vw,7.5rem);
+             font-size:clamp(2rem,10vw,7.5rem);
              opacity:0;animation:fadeUp .7s cubic-bezier(.4,0,.2,1) .35s forwards;"
     >
       {hero.name.split(' ')[0]}<br />
@@ -99,6 +104,24 @@ const { hero } = Astro.props;
                 stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
+      {resolvedResumeUrl && (
+        <a
+          href={resolvedResumeUrl}
+          download
+          class="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg
+                 text-[0.9rem] font-light no-underline transition-all duration-200
+                 hover:-translate-y-0.5"
+          style="border:1px solid var(--border);color:var(--text-muted);"
+          onmouseover="this.style.borderColor='var(--border-hover)';this.style.color='var(--text-primary)'"
+          onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'"
+        >
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+            <path d="M8 2v8M5 7l3 3 3-3M3 13h10" stroke="currentColor" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Resume
+        </a>
+      )}
     </div>
 
     <!-- Stats -->
