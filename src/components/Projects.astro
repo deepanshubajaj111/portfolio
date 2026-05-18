@@ -1,0 +1,335 @@
+---
+import type { Project } from '@/types/strapi';
+import { getStrapiImageUrl } from '@/lib/strapi';
+
+interface Props {
+  projects: Project['attributes'][];
+}
+const { projects } = Astro.props;
+const featured = projects.filter((p) => p.is_featured);
+const rest = projects.filter((p) => !p.is_featured && !p.is_coming_soon);
+const coming = projects.filter((p) => p.is_coming_soon);
+---
+
+<section id="projects" class="py-28" style="background:var(--bg2);">
+  <div class="max-w-[1200px] mx-auto px-12">
+
+    <!-- Header row -->
+    <div class="flex items-end justify-between mb-12 flex-wrap gap-6">
+      <div>
+        <p class="section-label reveal mb-4">Portfolio</p>
+        <h2
+          class="reveal reveal-delay-1 leading-[1.1] tracking-[-0.03em]"
+          style="font-family:'Syne',sans-serif;font-weight:800;
+                 font-size:clamp(2rem,4vw,3rem);"
+        >
+          Selected <span style="color:var(--cyan)">Projects</span>
+        </h2>
+      </div>
+
+      <!-- Filter buttons -->
+      <div class="reveal reveal-delay-2 flex gap-2 flex-wrap" id="filter-bar">
+        {['all', 'react', 'nextjs', 'fullstack'].map((f) => (
+          <button
+            class="filter-btn text-[0.72rem] px-4 py-2 rounded-full
+                   border transition-all duration-200 tracking-widest uppercase"
+            data-filter={f}
+            style="border-color:var(--border);background:transparent;
+                   color:var(--text-muted);font-family:'DM Sans',sans-serif;"
+          >
+            {f === 'all' ? 'All' : f === 'nextjs' ? 'Next.js' : f === 'react' ? 'React' : 'Full-Stack'}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Projects grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5" id="projects-grid">
+
+      {/* Featured projects — each spans full width */}
+      {featured.map((feat) => (
+        <div
+          class="project-entry lg:col-span-2 grid grid-cols-1 lg:grid-cols-2
+                 rounded-2xl overflow-hidden transition-all duration-300 proj-card"
+          style="background:var(--bg3);border:1px solid var(--border);"
+          data-tags={feat.tags.join(' ')}
+        >
+          <!-- Image side -->
+          <div
+            class="relative overflow-hidden"
+            style={`background:linear-gradient(135deg,${feat.gradient_from},${feat.gradient_to});min-height:280px;`}
+          >
+            {getStrapiImageUrl(feat.cover_image)
+              ? <img
+                  src={getStrapiImageUrl(feat.cover_image)!}
+                  alt={feat.title}
+                  class="w-full h-full object-cover"
+                />
+              : <div
+                  class="w-full h-full flex items-center justify-center
+                         font-display font-black opacity-[0.12]"
+                  style={`font-family:'Syne',sans-serif;font-size:5rem;
+                          color:${feat.label_color};`}
+                >{feat.label_text}</div>
+            }
+            <div
+              class="absolute inset-0"
+              style="background:linear-gradient(to right,transparent 60%,var(--bg3));"
+            ></div>
+            <!-- Tech pills -->
+          </div>
+
+          <!-- Body side -->
+          <div class="p-8 flex flex-col justify-center">
+            <span
+              class="inline-flex items-center gap-1.5 text-[0.62rem] tracking-widest
+                     uppercase mb-4 px-2.5 py-1 rounded-full w-fit"
+              style="color:var(--cyan);border:1px solid rgba(15,244,198,0.2);
+                     background:rgba(15,244,198,0.07);"
+            >★ Featured</span>
+
+            <div class="flex items-start justify-between gap-4 mb-3">
+              <h3
+                class="text-[1.2rem] leading-snug"
+                style="font-family:'Syne',sans-serif;font-weight:700;
+                       color:var(--text-primary);"
+              >{feat.title}</h3>
+              <div class="flex gap-2 flex-shrink-0">
+                {feat.live_url && (
+                  <a href={feat.live_url} target="_blank" rel="noopener"
+                     class="proj-link w-8 h-8 rounded-lg flex items-center justify-center
+                            border transition-all duration-200 no-underline text-sm"
+                     style="border-color:var(--border);color:var(--text-muted);"
+                  >↗</a>
+                )}
+                {feat.github_url && (
+                  <a href={feat.github_url} target="_blank" rel="noopener"
+                     class="proj-link w-8 h-8 rounded-lg flex items-center justify-center
+                            border transition-all duration-200 no-underline text-sm"
+                     style="border-color:var(--border);color:var(--text-muted);"
+                  >⌥</a>
+                )}
+              </div>
+            </div>
+
+            <div class="proj-desc-wrap mb-5">
+              <p
+                class="proj-desc text-[0.88rem] leading-relaxed font-light"
+                style="color:var(--text-muted);display:-webkit-box;-webkit-line-clamp:3;
+                       -webkit-box-orient:vertical;overflow:hidden;"
+              >{feat.description}</p>
+              <button
+                class="read-more-btn mt-2 text-[0.78rem] font-medium transition-colors duration-200"
+                style="color:var(--cyan);background:none;border:none;padding:0;cursor:pointer;"
+              >Read more</button>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              {feat.tech_stack.map((t) => (
+                <span
+                  class="text-[0.68rem] px-2.5 py-1 rounded-full"
+                  style="background:rgba(255,255,255,0.03);border:1px solid var(--border);
+                         color:var(--text-dim);"
+                >{t.name}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {/* Rest of projects */}
+      {rest.map((proj, i) => {
+        const imgUrl = getStrapiImageUrl(proj.cover_image);
+        return (
+          <div
+            class="project-entry proj-card rounded-2xl overflow-hidden
+                   transition-all duration-300"
+            style={`background:var(--bg3);border:1px solid var(--border);
+                    transition-delay:${i * 0.08}s;`}
+            data-tags={proj.tags.join(' ')}
+          >
+            <!-- Image -->
+            <div
+              class="relative overflow-hidden"
+              style={`height:200px;background:linear-gradient(135deg,${proj.gradient_from},${proj.gradient_to});`}
+            >
+              {imgUrl
+                ? <img src={imgUrl} alt={proj.title} class="w-full h-full object-cover"/>
+                : <div
+                    class="w-full h-full flex items-center justify-center
+                           font-extrabold opacity-[0.13]"
+                    style={`font-family:'Syne',sans-serif;font-size:4rem;
+                            color:${proj.label_color};`}
+                  >{proj.label_text}</div>
+              }
+              <div
+                class="absolute inset-0"
+                style="background:linear-gradient(to bottom,transparent 50%,var(--bg3));"
+              ></div>
+              <div class="absolute bottom-2.5 right-2.5 flex gap-1.5">
+                {proj.tech_stack.slice(0,2).map((t) => (
+                  <span
+                    class="text-[0.6rem] px-2 py-0.5 rounded-full backdrop-blur-sm"
+                    style="background:rgba(8,11,15,0.8);border:1px solid var(--border);
+                           color:var(--text-muted);"
+                  >{t.name}</span>
+                ))}
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="p-6">
+              <div class="flex items-start justify-between gap-3 mb-2">
+                <h3
+                  class="text-[1.05rem] leading-snug"
+                  style="font-family:'Syne',sans-serif;font-weight:700;
+                         color:var(--text-primary);"
+                >{proj.title}</h3>
+                <div class="flex gap-1.5 flex-shrink-0">
+                  {proj.live_url && (
+                    <a href={proj.live_url} target="_blank" rel="noopener"
+                       class="proj-link w-7 h-7 rounded-lg flex items-center justify-center
+                              border transition-all duration-200 no-underline text-xs"
+                       style="border-color:var(--border);color:var(--text-muted);"
+                    >↗</a>
+                  )}
+                  {proj.github_url && (
+                    <a href={proj.github_url} target="_blank" rel="noopener"
+                       class="proj-link w-7 h-7 rounded-lg flex items-center justify-center
+                              border transition-all duration-200 no-underline text-xs"
+                       style="border-color:var(--border);color:var(--text-muted);"
+                    >⌥</a>
+                  )}
+                </div>
+              </div>
+              <div class="proj-desc-wrap mb-4">
+                <p
+                  class="proj-desc text-[0.86rem] leading-relaxed font-light"
+                  style="color:var(--text-muted);display:-webkit-box;-webkit-line-clamp:3;
+                         -webkit-box-orient:vertical;overflow:hidden;"
+                >{proj.description}</p>
+                <button
+                  class="read-more-btn mt-1.5 text-[0.75rem] font-medium transition-colors duration-200"
+                  style="color:var(--cyan);background:none;border:none;padding:0;cursor:pointer;"
+                >Read more</button>
+              </div>
+              <div class="flex flex-wrap gap-1.5">
+                {proj.tech_stack.map((t) => (
+                  <span
+                    class="text-[0.66rem] px-2 py-0.5 rounded-full"
+                    style="background:rgba(255,255,255,0.03);border:1px solid var(--border);
+                           color:var(--text-dim);"
+                  >{t.name}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+
+    </div>
+
+    <!-- Coming Soon / In Progress -->
+    {coming.length > 0 && (
+      <div class="mt-14">
+        <p class="text-[0.72rem] uppercase tracking-[.12em] mb-5 flex items-center gap-3"
+           style="color:var(--text-dim);">
+          <span style="flex:1;height:1px;background:var(--border);display:inline-block;"></span>
+          In Progress &amp; Coming Soon
+          <span style="flex:1;height:1px;background:var(--border);display:inline-block;"></span>
+        </p>
+        <div class="flex flex-col gap-3">
+          {coming.map((proj) => (
+            <div
+              class="rounded-xl px-6 py-4 flex items-center justify-between gap-4 flex-wrap"
+              style={`border:1px solid var(--border);background:linear-gradient(to right,rgba(15,244,198,0.07) ${proj.progress ?? 0}%,var(--bg3) ${proj.progress ?? 0}%);`}
+            >
+              <!-- Left: name + pills -->
+              <div class="flex items-center gap-4 flex-wrap">
+                <p
+                  class="text-[0.95rem]"
+                  style="font-family:'Syne',sans-serif;font-weight:700;color:var(--text-primary);"
+                >{proj.title}</p>
+                <div class="flex gap-1.5 flex-wrap">
+                  {proj.tech_stack.slice(0, 4).map((t) => (
+                    <span
+                      class="text-[0.62rem] px-2 py-0.5 rounded-full"
+                      style="background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text-dim);"
+                    >{t.name}</span>
+                  ))}
+                  {proj.tech_stack.length > 4 && (
+                    <span
+                      class="text-[0.62rem] px-2 py-0.5 rounded-full"
+                      style="background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text-dim);"
+                    >+{proj.tech_stack.length - 4}</span>
+                  )}
+                </div>
+              </div>
+
+              <!-- Right: badge -->
+              <span
+                class="text-[0.6rem] px-2.5 py-1 rounded-full tracking-widest uppercase flex-shrink-0"
+                style="background:rgba(15,244,198,0.07);border:1px solid rgba(15,244,198,0.2);color:var(--cyan);"
+              >In Progress</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.proj-desc-wrap').forEach((wrap) => {
+    const desc = wrap.querySelector<HTMLElement>('.proj-desc')!;
+    const btn  = wrap.querySelector<HTMLButtonElement>('.read-more-btn')!;
+    // Hide button if text isn't actually clamped
+    if (desc.scrollHeight <= desc.clientHeight) { btn.style.display = 'none'; return; }
+    btn.addEventListener('click', () => {
+      const expanded = desc.style.webkitLineClamp === 'unset';
+      desc.style.webkitLineClamp = expanded ? '3' : 'unset';
+      desc.style.overflow = expanded ? 'hidden' : 'visible';
+      btn.textContent = expanded ? 'Read more' : 'Read less';
+    });
+  });
+</script>
+
+<style>
+  .proj-card:hover {
+    border-color: var(--border-hover) !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    transform: translateY(-3px);
+  }
+  .proj-link:hover {
+    border-color: var(--border-hover) !important;
+    color: var(--cyan) !important;
+    background: var(--cyan-glow);
+  }
+  .filter-btn:hover,
+  .filter-btn.active {
+    border-color: var(--border-hover) !important;
+    background: var(--cyan-glow) !important;
+    color: var(--cyan) !important;
+  }
+</style>
+
+<script>
+  // Filter logic
+  const btns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  btns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      btns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter ?? 'all';
+      document.querySelectorAll<HTMLElement>('.proj-card').forEach((card) => {
+        const tags = card.dataset.tags ?? '';
+        const show = filter === 'all' || tags.includes(filter);
+        card.style.opacity = show ? '1' : '0.15';
+        card.style.pointerEvents = show ? 'auto' : 'none';
+      });
+    });
+    // Set "all" active by default
+    if (btn.dataset.filter === 'all') btn.classList.add('active');
+  });
+</script>

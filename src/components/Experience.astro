@@ -1,0 +1,102 @@
+---
+import type { Experience } from '@/types/strapi';
+import { formatDateRange } from '@/lib/strapi';
+
+interface Props {
+  experiences: Experience['attributes'][];
+}
+const { experiences } = Astro.props;
+---
+
+<section id="experience" class="py-28" style="background:var(--bg);">
+  <div class="max-w-[1200px] mx-auto px-12">
+
+    <p class="section-label reveal mb-4">Journey</p>
+    <h2
+      class="reveal reveal-delay-1 mb-14 leading-[1.1] tracking-[-0.03em]"
+      style="font-family:'Syne',sans-serif;font-weight:800;
+             font-size:clamp(2rem,4vw,3rem);"
+    >
+      Work <span style="color:var(--cyan)">Experience</span>
+    </h2>
+
+    <!-- Timeline -->
+    <div class="relative pl-12">
+      <!-- Vertical line -->
+      <div class="timeline-line"></div>
+
+      {experiences.map((exp, i) => (
+        <div
+          class={`timeline-entry relative pb-14 ${
+            i === experiences.length - 1 ? 'pb-0' : ''
+          }`}
+          style={`transition-delay:${i * 0.1}s`}
+        >
+          <!-- Dot -->
+          <div
+            class="timeline-dot absolute top-1 w-3 h-3 rounded-full
+                   transition-all duration-300"
+            style="left:calc(-1.5rem - 6px);background:var(--bg);border:2px solid var(--cyan);"
+          ></div>
+
+          <!-- Date -->
+          <p
+            class="text-[0.72rem] tracking-widest uppercase mb-3 font-medium"
+            style="color:var(--cyan);"
+          >
+            {formatDateRange(exp.start_date, exp.end_date)}
+          </p>
+
+          <!-- Card -->
+          <div
+            class="exp-card rounded-xl p-7 transition-all duration-300"
+            style="background:var(--bg2);border:1px solid var(--border);"
+          >
+            <h3
+              class="mb-1 text-[1.15rem]"
+              style="font-family:'Syne',sans-serif;font-weight:700;
+                     color:var(--text-primary);"
+            >{exp.role}</h3>
+
+            <p
+              class="flex items-center gap-2 mb-4 text-[0.88rem]"
+              style="color:var(--cyan);"
+            >
+              {exp.company}
+              <span style="color:var(--text-dim);">·</span>
+              <span style="color:var(--text-dim);">{exp.employment_type}</span>
+            </p>
+
+            <p
+              class="mb-5 text-[0.93rem] leading-[1.75] font-light"
+              style="color:var(--text-muted);"
+            >{exp.description}</p>
+
+            <div class="flex flex-wrap gap-2">
+              {exp.technologies.map((tech) => (
+                <span
+                  class="text-[0.7rem] px-2.5 py-1 rounded-full tracking-wide"
+                  style="background:rgba(255,255,255,0.03);
+                         border:1px solid var(--border);
+                         color:var(--text-dim);"
+                >{tech.name}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .exp-card:hover {
+    border-color: var(--border-hover) !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  }
+  .timeline-entry:hover .timeline-dot {
+    background: var(--cyan) !important;
+    box-shadow: 0 0 12px var(--cyan);
+  }
+</style>

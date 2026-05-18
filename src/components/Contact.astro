@@ -1,0 +1,100 @@
+---
+import type { SocialLink, SiteConfig } from '@/types/strapi';
+
+interface Props {
+  email: string;
+  socialLinks: SocialLink['attributes'][];
+}
+const { email, socialLinks } = Astro.props;
+---
+
+<section id="contact" class="py-28" style="background:var(--bg);">
+  <div class="max-w-[1200px] mx-auto px-12">
+    <div class="max-w-[760px] mx-auto text-center">
+
+      <p
+        class="section-label reveal mb-6"
+        style="justify-content:center;"
+      >Let's Connect</p>
+
+      <h2
+        class="reveal reveal-delay-1 leading-[1] tracking-[-0.04em] mb-6"
+        style="font-family:'Syne',sans-serif;font-weight:800;
+               font-size:clamp(2.5rem,5vw,4.5rem);"
+      >
+        Got a project<br/>
+        <span
+          style="color:transparent;
+                 background:linear-gradient(135deg,var(--cyan) 0%,rgba(15,244,198,0.4) 100%);
+                 -webkit-background-clip:text;background-clip:text;"
+        >in mind?</span>
+      </h2>
+
+      <p
+        class="reveal reveal-delay-2 font-light text-[1.05rem] max-w-[440px]
+               mx-auto mb-10 leading-relaxed"
+        style="color:var(--text-muted);"
+      >
+        I'm currently open to freelance work and full-time opportunities.
+        Drop me a message and let's build something great together.
+      </p>
+
+      <!-- Email CTA -->
+      <a
+        href={`mailto:${email}`}
+        class="reveal reveal-delay-3 email-cta relative inline-block
+               no-underline rounded-xl px-8 py-4 mb-10
+               transition-all duration-300"
+        style="font-family:'Syne',sans-serif;font-weight:700;
+               font-size:clamp(1.1rem,2.5vw,1.6rem);
+               letter-spacing:-.02em;color:var(--text-primary);
+               border:1px solid var(--border);"
+      >
+        <span class="relative z-10">{email}</span>
+      </a>
+
+      <!-- Social links -->
+      <div class="reveal reveal-delay-4 flex items-center justify-center gap-4 flex-wrap">
+        {socialLinks.map((link) => (
+          <a
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-link flex items-center gap-2.5 px-5 py-3 rounded-xl
+                   no-underline transition-all duration-300"
+            style="border:1px solid var(--border);color:var(--text-muted);
+                   font-size:0.88rem;font-family:'DM Sans',sans-serif;"
+          >
+            <span class="flex-shrink-0" set:html={link.icon_svg} />
+            {link.platform}
+          </a>
+        ))}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .email-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--cyan-glow), transparent);
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .email-cta:hover {
+    border-color: var(--border-hover) !important;
+    color: var(--cyan) !important;
+  }
+  .email-cta:hover::before { opacity: 1; }
+
+  .social-link:hover {
+    border-color: var(--border-hover) !important;
+    color: var(--text-primary) !important;
+    background: var(--cyan-glow);
+    transform: translateY(-2px);
+  }
+</style>

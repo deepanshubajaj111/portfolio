@@ -1,0 +1,29 @@
+---
+import type { SiteConfig } from '@/types/strapi';
+
+interface Props {
+  config: SiteConfig['attributes'];
+}
+const { config } = Astro.props;
+---
+
+<footer
+  class="flex items-center justify-between px-12 py-6"
+  style="background:var(--bg2);border-top:1px solid var(--border);font-family:'DM Sans',sans-serif;"
+>
+  <p class="text-[0.78rem]" style="color:var(--text-dim)">
+    © {new Date().getFullYear()}
+    <span style="color:var(--text-muted)">Deepanshu Bajaj</span>.
+    {config.footer_note}
+  </p>
+  <p class="text-[0.72rem]" style="color:var(--text-dim)">
+    Built with Astro · Deployed on
+    <a
+      href="https://vercel.com"
+      target="_blank"
+      rel="noopener"
+      style="color:var(--cyan)"
+      class="no-underline hover:underline"
+    >Vercel</a>
+  </p>
+</footer>

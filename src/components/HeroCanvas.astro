@@ -1,0 +1,134 @@
+<canvas
+  id="hero-canvas"
+  class="absolute inset-0 w-full h-full"
+  style="pointer-events:none;z-index:0;"
+></canvas>
+
+<script>
+import * as THREE from 'three';
+
+const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement | null;
+if (!canvas || !canvas.parentElement) throw new Error('HeroCanvas: no element');
+
+const parent = canvas.parentElement;
+const getSize = () => ({ w: parent.clientWidth, h: parent.clientHeight });
+let { w, h } = getSize();
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setClearColor(0x000000, 0);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(w, h);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 200);
+camera.position.z = 35;
+
+// ── Particles ─────────────────────────────────────────────────────────────────
+const COUNT    = 130;
+const SPREAD_X = 58;
+const SPREAD_Y = 40;
+const SPREAD_Z = 8;
+const HALF_X   = SPREAD_X / 2;
+const HALF_Y   = SPREAD_Y / 2;
+
+const rawPos = new Float32Array(COUNT * 3);
+const vx     = new Float32Array(COUNT);
+const vy     = new Float32Array(COUNT);
+
+for (let i = 0; i < COUNT; i++) {
+  rawPos[i * 3]     = (Math.random() - 0.5) * SPREAD_X;
+  rawPos[i * 3 + 1] = (Math.random() - 0.5) * SPREAD_Y;
+  rawPos[i * 3 + 2] = (Math.random() - 0.5) * SPREAD_Z;
+  vx[i] = (Math.random() - 0.5) * 0.016;
+  vy[i] = (Math.random() - 0.5) * 0.010;
+}
+
+const ptGeo  = new THREE.BufferGeometry();
+const ptAttr = new THREE.BufferAttribute(rawPos, 3);
+ptAttr.setUsage(THREE.DynamicDrawUsage);
+ptGeo.setAttribute('position', ptAttr);
+
+scene.add(new THREE.Points(ptGeo, new THREE.PointsMaterial({
+  color:          0x0ff4c6,
+  size:           0.22,
+  transparent:    true,
+  opacity:        0.7,
+  sizeAttenuation: true,
+})));
+
+// ── Connection lines ──────────────────────────────────────────────────────────
+const CONNECT_DIST_SQ = 10 * 10;
+const MAX_LINES       = 4000;
+
+const linePos  = new Float32Array(MAX_LINES * 6);
+const lineGeo  = new THREE.BufferGeometry();
+const lineAttr = new THREE.BufferAttribute(linePos, 3);
+lineAttr.setUsage(THREE.DynamicDrawUsage);
+lineGeo.setAttribute('position', lineAttr);
+lineGeo.setDrawRange(0, 0);
+
+scene.add(new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({
+  color:       0x0ff4c6,
+  transparent: true,
+  opacity:     0.10,
+})));
+
+// ── Mouse parallax ────────────────────────────────────────────────────────────
+let targetX = 0, targetY = 0;
+document.addEventListener('mousemove', (e) => {
+  targetX = (e.clientX / window.innerWidth  - 0.5) *  3.0;
+  targetY = (e.clientY / window.innerHeight - 0.5) * -2.0;
+});
+
+// ── Render loop ───────────────────────────────────────────────────────────────
+(function animate() {
+  requestAnimationFrame(animate);
+
+  // Drift particles, wrap at edges
+  for (let i = 0; i < COUNT; i++) {
+    rawPos[i * 3]     += vx[i];
+    rawPos[i * 3 + 1] += vy[i];
+    if (rawPos[i * 3]     >  HALF_X) rawPos[i * 3]     = -HALF_X;
+    if (rawPos[i * 3]     < -HALF_X) rawPos[i * 3]     =  HALF_X;
+    if (rawPos[i * 3 + 1] >  HALF_Y) rawPos[i * 3 + 1] = -HALF_Y;
+    if (rawPos[i * 3 + 1] < -HALF_Y) rawPos[i * 3 + 1] =  HALF_Y;
+  }
+  ptAttr.needsUpdate = true;
+
+  // Rebuild line segments
+  let seg = 0;
+  outer: for (let i = 0; i < COUNT; i++) {
+    for (let j = i + 1; j < COUNT; j++) {
+      if (seg >= MAX_LINES - 1) break outer;
+      const dx = rawPos[i * 3] - rawPos[j * 3];
+      const dy = rawPos[i * 3 + 1] - rawPos[j * 3 + 1];
+      if (dx * dx + dy * dy < CONNECT_DIST_SQ) {
+        linePos[seg * 6]     = rawPos[i * 3];
+        linePos[seg * 6 + 1] = rawPos[i * 3 + 1];
+        linePos[seg * 6 + 2] = rawPos[i * 3 + 2];
+        linePos[seg * 6 + 3] = rawPos[j * 3];
+        linePos[seg * 6 + 4] = rawPos[j * 3 + 1];
+        linePos[seg * 6 + 5] = rawPos[j * 3 + 2];
+        seg++;
+      }
+    }
+  }
+  lineGeo.setDrawRange(0, seg * 2);
+  lineAttr.needsUpdate = true;
+
+  // Smooth camera follow mouse
+  camera.position.x += (targetX - camera.position.x) * 0.025;
+  camera.position.y += (targetY - camera.position.y) * 0.025;
+  camera.lookAt(0, 0, 0);
+
+  renderer.render(scene, camera);
+})();
+
+// ── Resize ────────────────────────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  const { w: nw, h: nh } = getSize();
+  camera.aspect = nw / nh;
+  camera.updateProjectionMatrix();
+  renderer.setSize(nw, nh);
+});
+</script>

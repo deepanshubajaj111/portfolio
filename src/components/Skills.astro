@@ -1,0 +1,105 @@
+---
+import type { SkillCategory } from '@/types/strapi';
+
+interface Props {
+  categories: SkillCategory['attributes'][];
+  techStrip: string[];
+}
+const { categories, techStrip } = Astro.props;
+// Duplicate for seamless marquee loop
+const strip = [...techStrip, ...techStrip];
+---
+
+<section id="skills" class="py-28" style="background:var(--bg2);">
+  <div class="max-w-[1200px] mx-auto px-12">
+
+    <p class="section-label reveal mb-4">Technical Arsenal</p>
+    <h2
+      class="reveal reveal-delay-1 mb-12 leading-[1.1] tracking-[-0.03em]"
+      style="font-family:'Syne',sans-serif;font-weight:800;
+             font-size:clamp(2rem,4vw,3rem);"
+    >
+      Skills &amp; <span style="color:var(--cyan)">Tech Stack</span>
+    </h2>
+
+    <!-- Skills grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {categories.map((cat, i) => (
+        <div
+          class={`skill-card reveal reveal-delay-${(i % 3) + 1}
+                  relative overflow-hidden rounded-xl p-7
+                  transition-all duration-300
+                  hover:-translate-y-1`}
+          style="background:var(--bg3);border:1px solid var(--border);"
+        >
+          <!-- Top accent line -->
+          <div
+            class="skill-top-line absolute top-0 left-0 right-0 h-px opacity-0
+                   transition-opacity duration-300"
+            style="background:linear-gradient(90deg,transparent,var(--cyan),transparent);"
+          ></div>
+
+          <!-- Icon -->
+          <div
+            class="flex items-center justify-center w-11 h-11 rounded-[10px] mb-4
+                   text-xl"
+            style="background:var(--cyan-glow);border:1px solid rgba(15,244,198,0.15);"
+          >
+            {cat.icon}
+          </div>
+
+          <!-- Title -->
+          <h3
+            class="mb-4 text-[0.95rem]"
+            style="font-family:'Syne',sans-serif;font-weight:700;
+                   color:var(--text-primary);"
+          >{cat.title}</h3>
+
+          <!-- Tags -->
+          <div class="flex flex-wrap gap-2">
+            {cat.skills.map((skill) => (
+              <span
+                class="text-[0.72rem] px-3 py-1 rounded-full transition-all duration-200"
+                style={skill.is_primary
+                  ? 'background:rgba(15,244,198,0.08);border:1px solid rgba(15,244,198,0.2);color:var(--cyan);'
+                  : 'background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text-muted);'
+                }
+              >
+                {skill.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Tech marquee strip -->
+    <div
+      class="tech-strip mt-8 flex items-center gap-8 py-4 px-6 rounded-xl overflow-hidden"
+      style="background:var(--bg3);border:1px solid var(--border);"
+    >
+      <div class="tech-strip-inner">
+        {strip.map((item) => (
+          <span
+            class="text-[0.75rem] font-medium tracking-widest uppercase
+                   flex-shrink-0 px-3 py-1.5 rounded-md border border-transparent
+                   transition-all duration-200 hover:border-[var(--border)]
+                   hover:text-[var(--text-primary)]"
+            style="color:var(--text-dim);"
+          >{item}</span>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .skill-card:hover .skill-top-line {
+    opacity: 1;
+  }
+  .skill-card:hover {
+    border-color: var(--border-hover) !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(15,244,198,0.08);
+  }
+</style>

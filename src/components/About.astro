@@ -1,0 +1,123 @@
+---
+import type { About } from '@/types/strapi';
+
+interface Props {
+  about: About['attributes'];
+}
+const { about } = Astro.props;
+---
+
+<section id="about" class="py-28" style="background:var(--bg);">
+  <div class="max-w-[1200px] mx-auto px-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+      <!-- Left: Bio -->
+      <div>
+        <p class="section-label reveal mb-4">About Me</p>
+        <h2
+          class="reveal reveal-delay-1 mb-6 leading-[1.1] tracking-[-0.03em]"
+          style="font-family:'Syne',sans-serif;font-weight:800;
+                 font-size:clamp(2rem,4vw,3rem);"
+        >
+          Code that<br/>
+          <span style="color:var(--cyan)">tells a story</span>
+        </h2>
+        <div
+          class="reveal reveal-delay-2 font-light leading-[1.85] text-[1.02rem] space-y-4"
+          style="color:var(--text-muted);"
+          set:html={about.bio.replace(/\n\n/g, '</p><p>').replace(/^/, '<p>').replace(/$/, '</p>')}
+        />
+      </div>
+
+      <!-- Right: Info card -->
+      <div class="reveal reveal-delay-3">
+        <div
+          class="relative overflow-hidden rounded-2xl p-8"
+          style="background:var(--bg2);border:1px solid var(--border);"
+        >
+          <!-- Glow -->
+          <div
+            class="absolute inset-0 pointer-events-none"
+            style="background:radial-gradient(ellipse 80% 60% at 100% 0%,
+                   rgba(15,244,198,0.05), transparent);"
+          ></div>
+
+          {[
+            {
+              label: 'Status',
+              value: about.status,
+              extra: about.availability === 'open',
+              tags: about.availability_types,
+            },
+            { label: 'Location', value: about.location },
+          ].map(({ label, value, extra, tags }, i) => (
+            <div
+              class="flex items-center justify-between py-3.5 relative border-b"
+              style="border-color:var(--border)"
+            >
+              <span
+                class="text-[0.75rem] uppercase tracking-[.08em]"
+                style="color:var(--text-dim);"
+              >{label}</span>
+              <span
+                class="flex items-center gap-2 text-[0.92rem]"
+                style="color:var(--text-primary);"
+              >
+                {extra && <span class="availability-dot"></span>}
+                {value}
+                {tags && tags.map((t: string) => (
+                  <span
+                    class="text-[0.7rem] px-2 py-0.5 rounded-full"
+                    style="background:rgba(15,244,198,0.08);
+                           border:1px solid rgba(15,244,198,0.2);
+                           color:var(--cyan);"
+                  >{t}</span>
+                ))}
+              </span>
+            </div>
+          ))}
+
+          <!-- Experience — calculated client-side from May 2022 -->
+          <div class="flex items-center justify-between py-3.5 relative border-b" style="border-color:var(--border)">
+            <span class="text-[0.75rem] uppercase tracking-[.08em]" style="color:var(--text-dim);">Experience</span>
+            <span id="exp-value" class="text-[0.92rem]" style="color:var(--text-primary);">4+ Years</span>
+          </div>
+
+          {[
+            { label: 'Focus',    value: about.focus },
+            { label: 'Employer', value: about.company },
+            { label: 'Currently', value: about.currently },
+          ].map(({ label, value }, i, arr) => (
+            <div
+              class={`flex items-center justify-between py-3.5 relative ${
+                i < arr.length - 1 ? 'border-b' : ''
+              }`}
+              style={i < arr.length - 1 ? 'border-color:var(--border)' : ''}
+            >
+              <span
+                class="text-[0.75rem] uppercase tracking-[.08em]"
+                style="color:var(--text-dim);"
+              >{label}</span>
+              <span
+                class="text-[0.92rem]"
+                style="color:var(--text-primary);"
+              >{value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  const el = document.getElementById('exp-value');
+  if (el) {
+    const start = new Date(2022, 4); // May 2022
+    const now = new Date();
+    const months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+    const years = Math.floor(months / 12);
+    el.textContent = `${years}+ Years`;
+  }
+</script>

@@ -1,0 +1,169 @@
+---
+import type { Hero } from '@/types/strapi';
+import HeroCanvas from '@/components/HeroCanvas.astro';
+
+interface Props {
+  hero: Hero['attributes'];
+}
+const { hero } = Astro.props;
+---
+
+<section
+  id="hero"
+  class="relative min-h-screen flex items-center overflow-hidden"
+>
+  <HeroCanvas />
+
+  <!-- Subtle radial accent -->
+  <div
+    class="absolute inset-0 pointer-events-none"
+    style="background:radial-gradient(ellipse 70% 60% at 20% 50%, rgba(15,244,198,0.05), transparent);"
+  ></div>
+
+  <!-- Content -->
+  <div class="relative z-10 w-full max-w-[1200px] mx-auto px-12 pt-32 pb-24">
+
+    <!-- Badge -->
+    <div
+      class="inline-flex items-center gap-2 mb-10 px-4 py-1.5 rounded-full
+             text-[0.72rem] font-medium tracking-widest uppercase"
+      style="color:var(--cyan);border:1px solid rgba(15,244,198,0.2);
+             background:rgba(15,244,198,0.06);
+             opacity:0;animation:fadeUp .6s cubic-bezier(.4,0,.2,1) .2s forwards;"
+    >
+      <span class="pulse-dot"></span>
+      {hero.badge_text}
+    </div>
+
+    <!-- Name + Role -->
+    <h1
+      class="leading-[0.95] tracking-[-0.04em] mb-6"
+      style="font-family:'Syne',sans-serif;font-weight:800;
+             font-size:clamp(3.5rem,8vw,7.5rem);
+             opacity:0;animation:fadeUp .7s cubic-bezier(.4,0,.2,1) .35s forwards;"
+    >
+      {hero.name.split(' ')[0]}<br />
+      {hero.name.split(' ').slice(1).join(' ')}
+      <span style="color:var(--cyan)"> —</span><br />
+      <!-- Typed role -->
+      <span
+        id="typed-role"
+        style="font-size:clamp(1.4rem,3vw,2.6rem);font-weight:500;
+               color:var(--text-muted);letter-spacing:-.01em;"
+      >
+        <span id="typed-text">{hero.roles[0]}</span
+        ><span class="typed-cursor"></span>
+      </span>
+    </h1>
+
+    <!-- Tagline -->
+    <p
+      class="mb-8 max-w-[520px] font-light text-[1.05rem] leading-relaxed"
+      style="color:var(--text-muted);
+             opacity:0;animation:fadeUp .7s cubic-bezier(.4,0,.2,1) .5s forwards;"
+      set:html={hero.tagline}
+    />
+
+    <!-- CTAs -->
+    <div
+      class="flex items-center gap-5 flex-wrap"
+      style="opacity:0;animation:fadeUp .7s cubic-bezier(.4,0,.2,1) .65s forwards;"
+    >
+      <a
+        href={hero.cta_primary_href}
+        class="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg
+               font-semibold text-[0.9rem] no-underline transition-all duration-200
+               hover:-translate-y-0.5"
+        style="background:var(--cyan);color:#080b0f;"
+        onmouseover="this.style.boxShadow='0 0 24px rgba(15,244,198,0.4)'"
+        onmouseout="this.style.boxShadow='none'"
+      >
+        {hero.cta_primary_label}
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a
+        href={hero.cta_secondary_href}
+        class="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg
+               text-[0.9rem] font-light no-underline transition-all duration-200
+               hover:-translate-y-0.5"
+        style="border:1px solid var(--border-hover);color:var(--cyan);"
+        onmouseover="this.style.background='var(--cyan-glow)'"
+        onmouseout="this.style.background='transparent'"
+      >
+        {hero.cta_secondary_label}
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M13 3L3 13M13 3H7M13 3V9" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Stats -->
+    <div
+      class="flex gap-12 mt-16 pt-10"
+      style="border-top:1px solid var(--border);
+             opacity:0;animation:fadeUp .7s cubic-bezier(.4,0,.2,1) .8s forwards;"
+    >
+      {[
+        { num: hero.stat_experience, label: 'Years Experience', id: 'hero-exp-stat' },
+        { num: hero.stat_projects,   label: 'Projects Shipped' },
+        { num: hero.stat_clients,    label: 'Happy Clients' },
+        { num: hero.stat_remote,     label: 'Remote Ready' },
+      ].map(({ num, label, id }) => (
+        <div>
+          <span
+            class="block tracking-[-0.03em]"
+            style="font-family:'Syne',sans-serif;font-weight:800;
+                   font-size:2.25rem;color:var(--text-primary);"
+          >
+            <span id={id} style="color:var(--cyan)">{num}</span>
+          </span>
+          <span
+            class="text-[0.78rem] uppercase tracking-widest"
+            style="color:var(--text-muted);"
+          >{label}</span>
+          </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ roles: hero.roles }}>
+  // Typed text cycling
+  const el = document.getElementById('typed-text');
+  if (el) {
+    let ri = 0, ci = 0, deleting = false;
+    function typeLoop() {
+      const word = roles[ri];
+      el.textContent = deleting ? word.slice(0, ci--) : word.slice(0, ++ci);
+      if (!deleting && ci === word.length) {
+        deleting = true;
+        setTimeout(typeLoop, 1800);
+        return;
+      }
+      if (deleting && ci < 0) {
+        deleting = false;
+        ri = (ri + 1) % roles.length;
+        ci = 0;
+      }
+      setTimeout(typeLoop, deleting ? 55 : 95);
+    }
+    // Start after hero entrance delay
+    setTimeout(typeLoop, 2200);
+  }
+
+  // Dynamic experience calculation from May 2022
+  const expStat = document.getElementById('hero-exp-stat');
+  const expTagline = document.getElementById('hero-tagline-exp');
+  if (expStat || expTagline) {
+    const start = new Date(2022, 4);
+    const now = new Date();
+    const months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+    const years = Math.floor(months / 12);
+    if (expStat) expStat.textContent = `${years}+`;
+    if (expTagline) expTagline.textContent = `${years}+`;
+  }
+</script>

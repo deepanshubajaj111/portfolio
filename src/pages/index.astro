@@ -1,0 +1,43 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero       from '@/components/Hero.astro';
+import About      from '@/components/About.astro';
+import Skills     from '@/components/Skills.astro';
+import Experience from '@/components/Experience.astro';
+import Projects   from '@/components/Projects.astro';
+import Contact    from '@/components/Contact.astro';
+
+import {
+  getHero,
+  getAbout,
+  getSkillCategories,
+  getExperiences,
+  getProjects,
+  getSocialLinks,
+  getSiteConfig,
+} from '@/lib/strapi';
+
+// All data fetched at build time — zero client-side waterfall
+const [hero, about, skillCategories, experiences, projects, socialLinks, siteConfig] =
+  await Promise.all([
+    getHero(),
+    getAbout(),
+    getSkillCategories(),
+    getExperiences(),
+    getProjects(),
+    getSocialLinks(),
+    getSiteConfig(),
+  ]);
+---
+
+<BaseLayout
+  title={siteConfig.site_title}
+  description={siteConfig.meta_description}
+>
+  <Hero   hero={hero} />
+  <About  about={about} />
+  <Skills categories={skillCategories} techStrip={siteConfig.tech_strip} />
+  <Experience experiences={experiences} />
+  <Projects   projects={projects} />
+  <Contact    email={siteConfig.contact_email} socialLinks={socialLinks} />
+</BaseLayout>

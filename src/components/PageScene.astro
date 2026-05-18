@@ -1,0 +1,73 @@
+<canvas
+  id="page-scene"
+  style="position:fixed;right:-50px;bottom:-50px;width:440px;height:440px;
+         pointer-events:none;z-index:1;"
+></canvas>
+
+<script>
+import * as THREE from 'three';
+
+const canvas = document.getElementById('page-scene') as HTMLCanvasElement | null;
+if (!canvas) throw new Error('PageScene: canvas not found');
+
+const W = 440, H = 440;
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setClearColor(0x000000, 0);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(W, H);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+camera.position.z = 18;
+
+// ── Primary: wireframe icosahedron ────────────────────────────────────────────
+const mainGeo   = new THREE.IcosahedronGeometry(5.5, 1);
+const mainEdges = new THREE.EdgesGeometry(mainGeo);
+const mainMesh  = new THREE.LineSegments(mainEdges, new THREE.LineBasicMaterial({
+  color:       0x0ff4c6,
+  transparent: true,
+  opacity:     0.22,
+}));
+scene.add(mainMesh);
+
+// ── Secondary: smaller inner octahedron ───────────────────────────────────────
+const innerGeo   = new THREE.OctahedronGeometry(2.5, 0);
+const innerEdges = new THREE.EdgesGeometry(innerGeo);
+const innerMesh  = new THREE.LineSegments(innerEdges, new THREE.LineBasicMaterial({
+  color:       0x0ff4c6,
+  transparent: true,
+  opacity:     0.12,
+}));
+scene.add(innerMesh);
+
+// ── Scroll tracking ───────────────────────────────────────────────────────────
+let scrollVel   = 0;
+let lastScrollY = window.scrollY;
+
+window.addEventListener('scroll', () => {
+  scrollVel   = window.scrollY - lastScrollY;
+  lastScrollY = window.scrollY;
+}, { passive: true });
+
+// ── Animate ───────────────────────────────────────────────────────────────────
+const clock = new THREE.Clock();
+
+(function animate() {
+  requestAnimationFrame(animate);
+
+  const t = clock.getElapsedTime();
+  scrollVel *= 0.92;
+
+  // Outer icosahedron — slow base rotation + scroll kick
+  mainMesh.rotation.x  = t * 0.13;
+  mainMesh.rotation.y  = t * 0.19 + window.scrollY * 0.0012;
+  mainMesh.rotation.z += scrollVel * 0.003;
+
+  // Inner octahedron — counter-rotates for depth
+  innerMesh.rotation.x = -t * 0.22;
+  innerMesh.rotation.y = -t * 0.30 - window.scrollY * 0.0008;
+
+  renderer.render(scene, camera);
+})();
+</script>
