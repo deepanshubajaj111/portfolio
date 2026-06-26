@@ -41,7 +41,7 @@ export async function getHero(): Promise<Hero['attributes']> {
       badge_text: 'Available for new opportunities',
       name: 'Deepanshu Bajaj',
       roles: ['React.js', 'Next.js', 'TypeScript', 'Supabase', 'Astro.js'],
-      tagline: `Building <strong>performant, pixel-perfect</strong> web experiences with React, Next.js & modern tooling. <span id="hero-tagline-exp">${years}+</span> years crafting products that scale.`,
+      tagline: `Building <strong>performant, pixel perfect</strong> web experiences with React, Next.js and modern tooling. <span id="hero-tagline-exp">${years}+</span> years crafting products that scale.`,
       cta_primary_label: 'View My Work',
       cta_primary_href: '#projects',
       cta_secondary_label: 'Get in Touch',
@@ -62,14 +62,14 @@ export async function getAbout(): Promise<About['attributes']> {
   } catch {
     const years = calcExpYears();
     return {
-      bio: `I'm <strong>Deepanshu Bajaj</strong>, a frontend engineer based in India with <strong>${years}+ years</strong> of professional experience building web applications at a product-driven service company. I specialise in creating fast, accessible, and beautifully crafted digital experiences.\n\nMy stack of choice is <strong>React / Next.js</strong> on the frontend, paired with <strong>Supabase</strong> for the backend. I obsess over performance, clean architecture, and UI details that most people don't notice — until they're missing.\n\nWhen I'm not writing code, I'm exploring new design patterns, contributing to side projects, or diving deep into the latest frontend ecosystem developments.`,
+      bio: `I'm <strong>Deepanshu Bajaj</strong>, a frontend engineer based in India with <strong>${years}+ years</strong> of professional experience building web applications at a product driven service company. I specialise in creating fast, accessible, and beautifully crafted digital experiences.\n\nMy stack of choice is <strong>React / Next.js</strong> on the frontend, paired with <strong>Supabase</strong> for the backend. I obsess over performance, clean architecture, and the UI details that most people don't notice until they're missing.\n\nWhen I'm not writing code, I'm exploring new design patterns, contributing to side projects, or diving deep into the latest frontend ecosystem developments.`,
       location: 'India 🇮🇳',
       status: 'Open to work',
-      focus: 'Frontend / Full-Stack',
+      focus: 'Frontend / Full Stack',
       company: 'Web Forte Technologies Pvt. Ltd.',
       currently: 'Building cool things',
       availability: 'open',
-      availability_types: ['Freelance', 'Full-time'],
+      availability_types: ['Freelance', 'Full time'],
     };
   }
 }
@@ -162,11 +162,11 @@ export async function getExperiences(): Promise<Experience['attributes'][]> {
       {
         role: 'Frontend Engineer',
         company: 'Web Forte Technologies Pvt. Ltd.',
-        employment_type: 'Full-time',
+        employment_type: 'Full time',
         start_date: '2022-05-01',
         end_date: null,
         order: 1,
-        description: 'Lead a team of 3 frontend developers across 4 client projects, taking full ownership from requirement gathering and architecture decisions to delivery, all shipped ahead of schedule. Handled Scrum Master responsibilities including sprint planning, daily standups, and backlog grooming. Collaborated directly with clients to translate product vision into performant, pixel-perfect web applications. Shipped 100+ features across projects while enforcing code quality standards, mentoring the team, and serving as the primary engineer for critical hotfixes and production issues.',
+        description: 'Lead a team of 3 frontend developers across 4 client projects, taking full ownership from requirement gathering and architecture decisions to delivery, all shipped ahead of schedule. Handled Scrum Master responsibilities including sprint planning, daily standups, and backlog grooming. Collaborated directly with clients to translate product vision into performant, pixel perfect web applications. Shipped 100+ features across projects while enforcing code quality standards, mentoring the team, and serving as the primary engineer for critical hotfixes and production issues.',
         technologies: [
           { id: 1, name: 'React.js' }, { id: 2, name: 'Next.js' },
           { id: 3, name: 'TypeScript' }, { id: 4, name: 'JavaScript ES6+' },
@@ -209,7 +209,7 @@ export async function getProjects(): Promise<Project['attributes'][]> {
         gradient_to: '#1a1028',
         label_color: '#c084fc',
         label_text: 'HP',
-        order: 1,
+        order: 5,
         tags: ['nextjs', 'fullstack'],
         tech_stack: [
           { id: 1, name: 'Next.js' },
@@ -227,45 +227,15 @@ export async function getProjects(): Promise<Project['attributes'][]> {
           { id: 13, name: 'Acuity' },
           { id: 14, name: 'Recharts' },
           { id: 15, name: 'PWA' },
+          { id: 16, name: 'WooCommerce' },
+          { id: 17, name: 'Redux' },
         ],
         cover_image: { data: { id: 3, attributes: { url: '/projects/honor-pet.png', alternativeText: null, width: 1280, height: 720 } } },
       },
       {
-        title: 'Drone Your Own',
-        slug: 'drone-your-own',
-
-        description: 'A freelance marketplace exclusively for drone pilots, built by a team of 2 that I led. Clients post jobs with specific requirements; pilots browse and filter opportunities by distance, budget, category, and deadline, then submit detailed proposals to compete for the work. Clients are notified of new bids and open a one on one TalkJS chat to negotiate terms, request proposal revisions, and finalise agreements. Once an offer is accepted, the job is locked, full payment is deducted from the client and held in escrow, and all competing bids are hidden from other pilots. Funds are released to the pilot only after the client approves deliverables, with screenshots and screen recording blocked until that point. The platform also includes a public marketplace where pilots list and sell aerial footage and photos, watermarked by default and protected via Cloudinary DRM. Twilio handles all notifications and Refine.dev powers the admin CMS.',
-        is_featured: true,
-        live_url: 'https://drone-your-own-git-main-fortes-projects.vercel.app',
-        github_url: null,
-        gradient_from: '#0a0f1a',
-        gradient_to: '#101828',
-        label_color: '#38bdf8',
-        label_text: 'DYO',
-        order: 3,
-        tags: ['nextjs', 'fullstack'],
-        tech_stack: [
-          { id: 1, name: 'Next.js' },
-          { id: 2, name: 'TypeScript' },
-          { id: 3, name: 'Supabase' },
-          { id: 4, name: 'Tailwind CSS' },
-          { id: 5, name: 'Material UI' },
-          { id: 6, name: 'React Hook Form' },
-          { id: 7, name: 'Zod' },
-          { id: 8, name: 'Stripe' },
-          { id: 9, name: 'TalkJS' },
-          { id: 10, name: 'Twilio' },
-          { id: 11, name: 'Cloudinary' },
-          { id: 12, name: 'Refine.dev' },
-          { id: 13, name: 'Escrow Payments' },
-          { id: 14, name: 'RBAC' }
-        ],
-        cover_image: { data: { id: 2, attributes: { url: '/projects/drone-your-own.png', alternativeText: null, width: 1280, height: 720 } } },
-      },
-      {
         title: 'We Raise Funds',
         slug: 'we-raise-funds',
-        description: 'A multi role fundraising platform built around a full RBAC hierarchy. Super Admins oversee the entire ecosystem, Fundraiser Managers create campaigns with defined funding goals and assign them to schools or individual students, and students access a personal portal to track their assigned fundraiser progress and contributions in real time. Manager and admin dashboards surface KPIs through rich Recharts visualisations, giving stakeholders complete visibility into campaign performance across all active fundraisers. Campaigns generate shareable QR codes for ad distribution, channelling traffic directly to each fundraiser. Jetpay powers secure payment collection across the platform. Built the entire Next.js frontend against custom Laravel REST APIs maintained by a separate backend team, owning all architecture decisions from kickoff through production. Navigated and resolved CORS challenges across environments. All forms are handled with React Hook Form and validated with Zod, with shadcn/ui ensuring a polished and consistent interface throughout.',
+        description: 'A multi role fundraising platform built around a full RBAC hierarchy. Super Admins oversee the entire ecosystem, Fundraiser Managers create campaigns with defined funding goals and assign them to schools or individual students, and students access a personal portal to track their assigned fundraiser progress and contributions in real time. Manager and admin dashboards surface KPIs through rich Recharts visualisations, giving stakeholders complete visibility into campaign performance across all active fundraisers. Campaigns generate shareable QR codes for ad distribution, channelling traffic directly to each fundraiser. Authorize.Net powers secure payment collection across the platform, built around a dynamic two tier fee engine with cent precise rounding, client side card validation, refunds, and real time financial KPIs. Built the entire Next.js frontend against custom Laravel REST APIs maintained by a separate backend team, owning all architecture decisions from kickoff through production. Navigated and resolved CORS challenges across environments. All forms are handled with React Hook Form and validated with Zod, with shadcn/ui ensuring a polished and consistent interface throughout.',
         is_featured: true,
         live_url: 'https://weraisefunds.org',
         github_url: null,
@@ -273,7 +243,7 @@ export async function getProjects(): Promise<Project['attributes'][]> {
         gradient_to: '#0a2e1e',
         label_color: '#0ff4c6',
         label_text: 'WRF',
-        order: 4,
+        order: 3,
         tags: ['nextjs', 'fullstack'],
         tech_stack: [
           { id: 1, name: 'Next.js' },
@@ -284,43 +254,42 @@ export async function getProjects(): Promise<Project['attributes'][]> {
           { id: 6, name: 'Zod' },
           { id: 7, name: 'Recharts' },
           { id: 8, name: 'Axios' },
-          { id: 9, name: 'Jetpay' },
+          { id: 9, name: 'Authorize.Net' },
           { id: 10, name: 'REST APIs' },
-          { id: 11, name: 'RBAC' }
+          { id: 11, name: 'Laravel' },
+          { id: 12, name: 'RBAC' }
         ],
         cover_image: { data: { id: 1, attributes: { url: '/projects/we-raise-funds.png', alternativeText: null, width: 1280, height: 720 } } },
       },
       {
-        title: 'Jewellery Store',
-        slug: 'jewellery-store',
-        is_coming_soon: true,
-        progress: 33,
-        description: 'An ongoing full-featured e-commerce platform for a jewellery store, built on MedusaJS for the store backend and storefront, Refine.dev as the admin CMS, Supabase as the database, Razorpay for payments, and Shiprocket for shipping. Beyond standard e-commerce, the platform includes a QR code system for product tracking, label generation and printing, low stock alerts, and product movement analysis. The complete order lifecycle is managed end-to-end — manual order creation, auto stock updates after returns, and a payment failure retry system ensure nothing slips through. HSN code support handles tax compliance out of the box. An appointment booking module lets customers schedule in-store visits. Admins have full control over inventory, pricing, customers, and shipping from the Refine.dev CMS, with Supabase powering real-time data across the platform.',
-        is_featured: false,
-        live_url: null,
+        title: 'Delfee',
+        slug: 'delfee',
+        description: 'A full stack jewellery ecommerce platform delivered solo end to end, covering the storefront, admin dashboard, payments, shipping, GST billing and content system, owning every technical decision from data modelling and API design through to deployment, as sole engineer and de facto technical lead setting the architecture a full team could scale on. Built on Medusa v2 with a Next.js 15 storefront, Refine.dev plus Supabase admin, and a headless CMS. Captures revenue across every way customers like to pay: Razorpay for UPI, cards and wallets alongside Cash on Delivery with a pay now, pay rest on delivery option. Adds GST compliant invoicing with HSN codes plus recovery for abandoned carts and charged but unsaved orders. Shipping runs through Shiprocket. An automated CI/CD pipeline on GitHub Actions drives a monorepo holding all three apps (store, backend, CMS), building only what changed on each push, then deploying, running database migrations and health checks before going live. Everything runs on a single cost efficient DigitalOcean server with automatic HTTPS, pushing features live in minutes.',
+        is_featured: true,
+        live_url: 'https://delfee.in',
         github_url: null,
         gradient_from: '#1a0f08',
         gradient_to: '#2e1a0a',
         label_color: '#f59e0b',
-        label_text: 'JS',
-        order: 2,
+        label_text: 'DF',
+        order: 4,
         tags: ['nextjs', 'fullstack'],
         tech_stack: [
-          { id: 1, name: 'MedusaJS' }, { id: 2, name: 'Next.js' },
-          { id: 3, name: 'TypeScript' }, { id: 4, name: 'Supabase' },
-          { id: 5, name: 'Refine.dev' }, { id: 6, name: 'Razorpay' },
+          { id: 1, name: 'Medusa v2' }, { id: 2, name: 'Next.js 15' },
+          { id: 3, name: 'TypeScript' }, { id: 4, name: 'Refine.dev' },
+          { id: 5, name: 'Supabase' }, { id: 6, name: 'Razorpay' },
           { id: 7, name: 'Shiprocket' }, { id: 8, name: 'Tailwind CSS' },
-          { id: 9, name: 'React Hook Form' }, { id: 10, name: 'Zod' },
-          { id: 11, name: 'QR Code' }, { id: 12, name: 'HSN' },
+          { id: 9, name: 'GitHub Actions' }, { id: 10, name: 'Docker' },
+          { id: 11, name: 'DigitalOcean' }, { id: 12, name: 'GST / HSN' },
         ],
-        cover_image: { data: null },
+        cover_image: { data: { id: 4, attributes: { url: '/projects/delfee.png', alternativeText: 'Delfee jewellery storefront', width: 4104, height: 2346 } } },
       },
       {
         title: 'Digivyap',
         slug: 'digivyap',
         is_coming_soon: true,
         progress: 10,
-        description: 'A multi-tenant SaaS CRM built for pharma sales teams, with AI-powered lead management and strict tenant isolation to eliminate data leakage across organisations.',
+        description: 'A multi tenant SaaS CRM built for pharma sales teams, with AI powered lead management and strict tenant isolation to eliminate data leakage across organisations.',
         is_featured: false,
         live_url: null,
         github_url: null,
@@ -333,7 +302,7 @@ export async function getProjects(): Promise<Project['attributes'][]> {
         tech_stack: [
           { id: 1, name: 'Next.js' }, { id: 2, name: 'TypeScript' },
           { id: 3, name: 'Supabase' }, { id: 4, name: 'AI' },
-          { id: 5, name: 'Multi-tenant SaaS' },
+          { id: 5, name: 'Multi tenant SaaS' },
         ],
         cover_image: { data: null },
       }
@@ -348,8 +317,8 @@ export async function getSiteConfig(): Promise<SiteConfig['attributes']> {
     return data.data.attributes;
   } catch {
     return {
-      site_title: 'Deepanshu Bajaj — Frontend Engineer',
-      meta_description: 'Senior Frontend Engineer specialising in React, Next.js, and Supabase. Building performant, pixel-perfect web experiences.',
+      site_title: 'Deepanshu Bajaj | Frontend Engineer',
+      meta_description: 'Senior Frontend Engineer specialising in React, Next.js, and Supabase. Building performant, pixel perfect web experiences.',
       og_image: { data: null },
       contact_email: 'dbajaj.dev@gmail.com',
       resume_url: '/resume.pdf',
@@ -409,5 +378,5 @@ export function formatDateRange(start: string, end: string | null): string {
   const endMs = end ? new Date(end).getTime() : Date.now();
   const yrs = Math.floor((endMs - startMs) / (1000 * 60 * 60 * 24 * 365));
   const dur = yrs > 0 ? `${yrs}+ yrs` : 'Less than a year';
-  return `${s} — ${e} · ${dur}`;
+  return `${s} to ${e} · ${dur}`;
 }
