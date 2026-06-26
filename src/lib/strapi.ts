@@ -282,7 +282,7 @@ export async function getProjects(): Promise<Project['attributes'][]> {
           { id: 9, name: 'GitHub Actions' }, { id: 10, name: 'Docker' },
           { id: 11, name: 'DigitalOcean' }, { id: 12, name: 'GST / HSN' },
         ],
-        cover_image: { data: { id: 4, attributes: { url: '/projects/delfee.png', alternativeText: 'Delfee jewellery storefront', width: 4104, height: 2346 } } },
+        cover_image: { data: { id: 4, attributes: { url: '/projects/delfee.png', alternativeText: 'Delfee jewellery storefront', width: 1600, height: 914 } } },
       },
       {
         title: 'Digivyap',
